@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+    <com.jie.pictureselector.zoomable.ZoomableDraweeView
+        android:id="@+id/big_image_browse_gestureimageview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:adjustViewBounds="true"
+        fresco:actualImageScaleType="fitCenter"
+        fresco:progressBarAutoRotateInterval="1000"
+        fresco:progressBarImage="@mipmap/aviary_ic_rotate_right_nomal"
+        fresco:progressBarImageScaleType="centerInside"
+        ></com.jie.pictureselector.zoomable.ZoomableDraweeView>
+
+</RelativeLayout>

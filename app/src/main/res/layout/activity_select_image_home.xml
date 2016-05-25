@@ -1,0 +1,79 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+              android:background="@color/edit_base_wheel_bg"
+    android:orientation="vertical" >
+
+    <View
+        android:id="@+id/view_other"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/transparent"
+        android:onClick="onCancel" />
+
+    <LinearLayout
+        android:id="@+id/layout_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_take_photes"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/take_photes_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="selectImageForTakePhontes"
+                android:text="@string/select_image_take_photes"
+                android:textColor="@color/select_photes_text_color"
+                android:textSize="20sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@drawable/divider" />
+
+            <TextView
+                android:id="@+id/tv_phone_photes"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/phonte_photes_selector"
+                android:clickable="true"
+                android:gravity="center"
+                android:onClick="selectImageForPhone"
+                android:text="@string/select_image_phone_photes"
+                android:textColor="@color/select_photes_text_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="8dp"
+            android:background="@drawable/bg_corners"
+            android:onClick="onCancel" >
+
+            <TextView
+                android:id="@+id/tv_select_image_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/select_image_cancel"
+                android:textColor="@color/select_photes_text_color"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

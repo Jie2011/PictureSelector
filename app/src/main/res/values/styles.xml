@@ -1,0 +1,22 @@
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.Base" parent="@android:style/Theme.Light">
+        <!-- Customize your theme here. -->
+        <!-- <item name="colorPrimary">@color/DeepPurple</item>
+         <item name="colorPrimaryDark">@color/DeepPurple</item>
+         <item name="colorAccent">@color/Orange</item>-->
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat">
+        <item name="android:windowNoTitle">true</item>
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+</resources>

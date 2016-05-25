@@ -1,0 +1,45 @@
+<resources>
+
+    <color name="black">#000000</color>
+    <color name="progress_bg">#e9e9e9</color>
+    <color name="progress_color">#76d59b</color>
+    <color name="progress2_color">#ffd543</color>
+
+    <!-- custom -->
+    <color name="custom_text_red">#fd5555</color>
+    <color name="custom_text_grey">#afafaf</color>
+
+    <!-- The default background of the menu. -->
+    <color name="md__defaultBackground">#FF555555</color>
+
+    <drawable name="white">#FFFFFFFF</drawable>
+    <color name="white">#FF555555</color>
+    <color name="trans">#00000000</color>
+
+    <color name="gray_bg">#cccccc</color>
+    <color name="gray_dark_bg">#666666</color>
+
+    <!--主题颜色-->
+    <color name="top_color">#fd4b4d</color>
+    <color name="image_checked_bg">#66000000</color>
+
+    <!-- 菜单栏 按钮文字颜色 -->
+    <color name="topbar_btn_text_color">#ffffff</color>
+
+    <!-- 返回按钮 字体颜色 -->
+    <color name="back_color_noclick">#ffff</color>
+    <color name="back_color_click">#8fff</color>
+
+    <drawable name="transparent">#00000000</drawable>
+
+    <!-- 下拉刷新 -->
+    <drawable name="main_background">#efeff4</drawable>
+
+    <color name="chart_grey">#bababa</color>
+
+    <color name="select_photes_text_color">#0080ff</color>
+
+    <drawable name="divider">#d9d9d9</drawable>
+    <color name="item_press">#e6e6e6</color>
+    <color name="edit_base_wheel_bg">#50000000</color>
+</resources>
