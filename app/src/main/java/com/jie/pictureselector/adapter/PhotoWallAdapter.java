@@ -41,21 +41,21 @@ public class PhotoWallAdapter extends BaseAdapter {
     private ResizeOptions mResizeOptions;
     private SenbaImageLoader senbaImageLoader;
 
-    private void initSenbaImageLoader(){
+    private void initSenbaImageLoader() {
         senbaImageLoader = SenbaImageLoader.newInstance(context);
-        int w = UITools.getScreenWidth(context)/3;
-        mResizeOptions = senbaImageLoader.createResizeOptions(w,w);
+        int w = UITools.getScreenWidth(context) / 3;
+        mResizeOptions = senbaImageLoader.createResizeOptions(w, w);
     }
 
-    public PhotoWallAdapter(Context context, ArrayList<ImageSelectModel> imagePathList,int type,PhotoImageSelectListener photoImageSelectListener,List<String> mSelectList) {
+    public PhotoWallAdapter(Context context, ArrayList<ImageSelectModel> imagePathList, int type, PhotoImageSelectListener photoImageSelectListener, List<String> mSelectList) {
         this.context = context;
         this.imagePathList = imagePathList;
         this.type = type;
         selectionMap = new LinkedHashMap<String, String>();
-        if(mSelectList!=null && mSelectList.size()>0){
-        	for(String s:mSelectList){
-        		selectionMap.put(s, s);
-        	}
+        if (mSelectList != null && mSelectList.size() > 0) {
+            for (String s : mSelectList) {
+                selectionMap.put(s, s);
+            }
         }
         this.photoImageSelectListener = photoImageSelectListener;
         updateImageState();
@@ -65,15 +65,15 @@ public class PhotoWallAdapter extends BaseAdapter {
     public void setImagePathList(ArrayList<ImageSelectModel> imagePathList) {
         this.imagePathList = imagePathList;
         selectionMap.clear();
-        for(ImageSelectModel model:imagePathList){
-            if(model.select){
+        for (ImageSelectModel model : imagePathList) {
+            if (model.select) {
                 selectionMap.put(model.url, model.url);
             }
         }
     }
 
-    private void updateImageState(){
-        if(selectionMap != null) {
+    private void updateImageState() {
+        if (selectionMap != null) {
             for (ImageSelectModel imageSelectModel : imagePathList) {
                 if (selectionMap.containsKey(imageSelectModel.url)) {
                     imageSelectModel.select = true;
@@ -106,8 +106,8 @@ public class PhotoWallAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-    	final ImageSelectModel model = imagePathList.get(position);
-        
+        final ImageSelectModel model = imagePathList.get(position);
+
         final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.photo_wall_item, null);
@@ -120,10 +120,10 @@ public class PhotoWallAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        if(type == PhotoWallActivity.TYPE_MULTIPLE){
-        	holder.checkBox.setVisibility(View.VISIBLE);
-        }else{
-        	holder.checkBox.setVisibility(View.GONE);
+        if (type == PhotoWallActivity.TYPE_MULTIPLE) {
+            holder.checkBox.setVisibility(View.VISIBLE);
+        } else {
+            holder.checkBox.setVisibility(View.GONE);
         }
         //tag的key必须使用id的方式定义以保证唯一，否则会出现IllegalArgumentException.
         holder.checkBox.setOnClickListener(new OnClickListener() {
@@ -148,10 +148,10 @@ public class PhotoWallAdapter extends BaseAdapter {
                 photoImageSelectListener.onSelectCount(selectionMap.size());
             }
         });
-        if(model.select || selectionMap.containsKey(model.url)){
-        	holder.checkBox.setBackgroundResource(R.mipmap.checkbox_checked);
-        }else{
-        	holder.checkBox.setBackgroundResource(R.mipmap.checkbox_normal);
+        if (model.select || selectionMap.containsKey(model.url)) {
+            holder.checkBox.setBackgroundResource(R.mipmap.checkbox_checked);
+        } else {
+            holder.checkBox.setBackgroundResource(R.mipmap.checkbox_normal);
         }
         holder.imageView.setTag(model.url);
         senbaImageLoader.setImage(holder.imageView, context.getResources().getString(R.string.sd_image_url, model.url), mResizeOptions);
@@ -170,9 +170,9 @@ public class PhotoWallAdapter extends BaseAdapter {
     public void clearSelectionMap() {
         selectionMap.clear();
     }
-    
-    public interface PhotoImageSelectListener{
-    	void onSelectCount(int count);
+
+    public interface PhotoImageSelectListener {
+        void onSelectCount(int count);
     }
-    
+
 }

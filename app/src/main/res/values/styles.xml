@@ -15,7 +15,7 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
     <!-- Application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat">
+    <style name="AppTheme" parent="AppTheme.Base">
         <item name="android:windowNoTitle">true</item>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>

@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 import com.jie.pictureselector.R;
 import com.jie.pictureselector.adapter.PhotoAlbumLVAdapter;
+import com.jie.pictureselector.constant.Constant;
 import com.jie.pictureselector.model.PhotoAlbumLVItem;
 import com.jie.pictureselector.utils.Utility;
 
@@ -23,13 +23,12 @@ import java.util.HashSet;
 
 /**
  * 分相册查看SD卡所有图片。
- * Created by hanj on 14-10-14.
+ * Created by liumingjie on 14-10-14.
  */
-public class PhotoAlbumActivity extends BaseActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+public class PhotoAlbumActivity extends BaseActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+
+    private PhotoAlbumLVItem mLastestAlbum;
+    private ArrayList<PhotoAlbumLVItem> mPhotoAlbumLVItems;
 
     @Override
     protected int getLayoutId() {
@@ -46,50 +45,32 @@ public class PhotoAlbumActivity extends BaseActivity {
         if (!t.hasExtra("latest_count")) {
             return;
         }
+        mLastestAlbum = new PhotoAlbumLVItem(getResources().getString(R.string.latest_image),
+                t.getIntExtra("latest_count", -1), t.getStringExtra("latest_first_img"));
+        initBaseView();
+        initAlbumListview();
+    }
+
+
+    private void initBaseView() {
         TextView titleTV = (TextView) findViewById(R.id.topbar_title_tv);
         titleTV.setText(R.string.select_album);
-
         Button cancelBtn = (Button) findViewById(R.id.topbar_right_btn);
         cancelBtn.setText(R.string.main_cancel);
         cancelBtn.setVisibility(View.VISIBLE);
+        cancelBtn.setOnClickListener(this);
+    }
 
+    private void initAlbumListview() {
         ListView listView = (ListView) findViewById(R.id.select_img_listView);
-        //第二种方式：使用ContentProvider。（效率更高）
-        final ArrayList<PhotoAlbumLVItem> list = new ArrayList<PhotoAlbumLVItem>();
+        mPhotoAlbumLVItems = new ArrayList<PhotoAlbumLVItem>();
         //“最近照片”
-        list.add(new PhotoAlbumLVItem(getResources().getString(R.string.latest_image),
-                t.getIntExtra("latest_count", -1), t.getStringExtra("latest_first_img")));
+        mPhotoAlbumLVItems.add(mLastestAlbum);
         //相册
-        list.addAll(getImagePathsByContentProvider());
-
-        PhotoAlbumLVAdapter adapter = new PhotoAlbumLVAdapter(this, list);
+        mPhotoAlbumLVItems.addAll(getImagePathsByContentProvider());
+        PhotoAlbumLVAdapter adapter = new PhotoAlbumLVAdapter(this, mPhotoAlbumLVItems);
         listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(PhotoAlbumActivity.this, PhotoWallActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-
-                //第一行为“最近照片”
-                if (position == 0) {
-                    intent.putExtra("code", 200);
-                } else {
-                    intent.putExtra("code", 100);
-                    intent.putExtra("folderPath", list.get(position).getPathName());
-                }
-                startActivity(intent);
-                PhotoAlbumActivity.this.finish();
-            }
-        });
-
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //取消，回到主页面
-                backAction();
-            }
-        });
+        listView.setOnItemClickListener(this);
     }
 
     /**
@@ -146,15 +127,12 @@ public class PhotoAlbumActivity extends BaseActivity {
 
         String key_MIME_TYPE = MediaStore.Images.Media.MIME_TYPE;
         String key_DATA = MediaStore.Images.Media.DATA;
-
         ContentResolver mContentResolver = getContentResolver();
-
         // 只查询jpg和png的图片
         Cursor cursor = mContentResolver.query(mImageUri, new String[]{key_DATA},
                 key_MIME_TYPE + "=? or " + key_MIME_TYPE + "=? or " + key_MIME_TYPE + "=?",
                 new String[]{"image/jpg", "image/jpeg", "image/png"},
                 MediaStore.Images.Media.DATE_MODIFIED);
-
         ArrayList<PhotoAlbumLVItem> list = null;
         if (cursor != null) {
             if (cursor.moveToLast()) {
@@ -181,7 +159,6 @@ public class PhotoAlbumActivity extends BaseActivity {
                     }
                 }
             }
-
             cursor.close();
         }
 
@@ -195,4 +172,28 @@ public class PhotoAlbumActivity extends BaseActivity {
         overridePendingTransition(R.anim.in_from_left, R.anim.out_from_right);
     }
 
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.topbar_right_btn:
+                backAction();
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(PhotoAlbumActivity.this, PhotoWallActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        //第一行为“最近照片”
+        if (position == 0) {
+            intent.putExtra(Constant.TYPE_ALBUM, Constant.TYPE_ALBUM_LASTEST);
+        } else {
+            intent.putExtra(Constant.TYPE_ALBUM, Constant.TYPE_ALBUM_OTHER);
+            intent.putExtra(Constant.TYPE_FOLDERPATH, mPhotoAlbumLVItems.get(position).getPathName());
+        }
+        startActivity(intent);
+        PhotoAlbumActivity.this.finish();
+    }
 }

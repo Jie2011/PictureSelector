@@ -61,7 +61,7 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
         mViewPager.setCurrentItem(mCurrentIndex);
         mCurrentImageModel = mPics.get(mCurrentIndex);
         updateCurrentImageState();
-        updateImagePageIndex(mCurrentIndex+1);
+        updateImagePageIndex(mCurrentIndex + 1);
     }
 
     private void updateCurrentImageState() {
@@ -128,7 +128,7 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
             mCurrentIndex = arg0;
             mCurrentImageModel = mPics.get(mCurrentIndex);
             updateCurrentImageState();
-            updateImagePageIndex(mCurrentIndex+1);
+            updateImagePageIndex(mCurrentIndex + 1);
         }
 
         @Override
@@ -140,8 +140,8 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
         }
     }
 
-    private void updateImagePageIndex(int page){
-        mPageIndexTextView.setText(this.getResources().getString(R.string.image_page_index,page,mPics.size()));
+    private void updateImagePageIndex(int page) {
+        mPageIndexTextView.setText(this.getResources().getString(R.string.image_page_index, page, mPics.size()));
     }
 
     @Override
@@ -171,7 +171,7 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
     }
 
     public void onBackClick(View v) {
-       onBack(RESULT_CANCELED);
+        onBack(RESULT_CANCELED);
     }
 
     @Override

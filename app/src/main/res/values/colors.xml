@@ -13,7 +13,7 @@
     <color name="md__defaultBackground">#FF555555</color>
 
     <drawable name="white">#FFFFFFFF</drawable>
-    <color name="white">#FF555555</color>
+    <color name="white">#FFFFFFFF</color>
     <color name="trans">#00000000</color>
 
     <color name="gray_bg">#cccccc</color>

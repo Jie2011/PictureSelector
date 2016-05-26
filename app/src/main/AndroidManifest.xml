@@ -29,8 +29,8 @@
 
         <activity android:name="com.jie.pictureselector.activity.CameraActivity"></activity>
         <activity android:name=".activity.PhotoWallPreviewActivity"></activity>
-        <activity android:name=".activity.PhotoAlbumActivity"></activity>
-        <activity android:name=".activity.PhotoWallActivity"></activity>
+        <activity android:name=".activity.PhotoAlbumActivity" android:launchMode="singleTask"></activity>
+        <activity android:name=".activity.PhotoWallActivity" android:launchMode="singleTask"></activity>
         <activity android:name=".activity.SelectImageHomeActivity"></activity>
     </application>
 
