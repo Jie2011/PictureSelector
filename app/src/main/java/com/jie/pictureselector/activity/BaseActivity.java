@@ -1,7 +1,9 @@
 package com.jie.pictureselector.activity;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentActivity;
+import android.view.View;
 
 /**
  * Created by liumingjie on 2016/5/25.
@@ -31,11 +33,14 @@ public abstract class BaseActivity extends FragmentActivity{
     *//**
      * 设置是否可以滑动关闭
      *
-     * @param enable
      *//*
     protected void setSwipeBackEnable(boolean enable) {
         SwipeBackHelper.getCurrentPage(this).setSwipeBackEnable(enable);
     }*/
+
+    protected <T extends View> T $(@IdRes int id) {
+        return (T) findViewById(id);
+    }
 
     /**
      * layout id

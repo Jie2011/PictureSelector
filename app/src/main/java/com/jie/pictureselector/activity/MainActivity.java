@@ -27,11 +27,11 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mUserPhotoImageView = (SimpleDraweeView) findViewById(R.id.iv_image);
+        mUserPhotoImageView = $(R.id.iv_image);
     }
 
     public void onSelectPicture(View v){
-        SelectImageHomeActivity.gotoSelectImageActivity(this, PhotoWallActivity.TYPE_SINGLE, null, PhotoWallActivity.CUT);
+        SelectImageHomeActivity.gotoSelectImageActivity(this, PhotoWallActivity.TYPE_MULTIPLE, null, PhotoWallActivity.CUT);
     }
 
     @Override
