@@ -309,8 +309,4 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
         mPhotoWall.smoothScrollToPosition(pos);
     }
 
-    @Override
-    public void setConfirmString(String confirmString) {
-        confirmBtn.setText(confirmString);
-    }
 }
