@@ -1,48 +1,36 @@
 package com.jie.pictureselector.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jie.pictureselector.R;
+import com.jie.pictureselector.activity.view.IPhotoPreviewView;
 import com.jie.pictureselector.adapter.GalleryPagerAdapter;
 import com.jie.pictureselector.model.ImageSelectModel;
+import com.jie.pictureselector.presenter.PhotoPreviewPresenter;
 import com.jie.pictureselector.view.CustomViewPager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
-public class PhotoWallPreviewActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener {
+public class PhotoWallPreviewActivity extends BaseActivity implements View.OnClickListener, View.OnLongClickListener, IPhotoPreviewView {
 
     public static String IMAGES = "images";
     public static String INDEX = "index";
     public static String SELECTED_LIST = "selectList";
-    public static String CLASS_TARGET = "targetClass";
     public static int REQUEST_CODE_PREVIEW = 101;
 
     private CustomViewPager mViewPager;
     private GalleryPagerAdapter mAdapter;
-    private ArrayList<ImageSelectModel> mPics;
-    private int mCurrentIndex = 0;
-    private boolean mIsNeedHideControler = false;
-    private RelativeLayout mGuideLayout;
-    private Class<?> targetClass;
-    private int mSavaType;
     private ImageView mImageSelectStateView;
     private ImageSelectModel mCurrentImageModel;
-    private HashMap<String, String> mSelectMap = new HashMap<String, String>();
     private TextView mSureTextView;
     private TextView mPageIndexTextView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private PhotoPreviewPresenter mPhotoPreviewPresenter;
 
     @Override
     protected int getLayoutId() {
@@ -56,31 +44,26 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
 
     @Override
     protected void initView() {
-        getPics();
         initBaseView();
-        mViewPager.setCurrentItem(mCurrentIndex);
-        mCurrentImageModel = mPics.get(mCurrentIndex);
-        updateCurrentImageState();
-        updateImagePageIndex(mCurrentIndex + 1);
+        initPresenter();
     }
 
-    private void updateCurrentImageState() {
-        if (mCurrentImageModel.select) {
-            mImageSelectStateView.setBackgroundResource(R.mipmap.checkbox_checked);
-        } else {
-            mImageSelectStateView.setBackgroundResource(R.mipmap.checkbox_normal);
-        }
+    private void initPresenter() {
+        mPhotoPreviewPresenter = new PhotoPreviewPresenter(this);
+    }
 
-        if (mSelectMap.size() > 0) {
-            mSureTextView.setText("确定(" + mSelectMap.size() + ")");
+    @Override
+    public void updateCurrentImageState(boolean selected) {
+        if (selected) {
+            mImageSelectStateView.setImageResource(R.mipmap.checkbox_checked);
         } else {
-            mSureTextView.setText("确定");
+            mImageSelectStateView.setImageResource(R.mipmap.checkbox_normal);
         }
     }
 
     private void initBaseView() {
         mViewPager = (CustomViewPager) findViewById(R.id.gallery_layout_pager);
-        mAdapter = new GalleryPagerAdapter(this, mPics, this);
+        mAdapter = new GalleryPagerAdapter(this, this);
         mViewPager.setAdapter(mAdapter);
         mViewPager.setOnPageChangeListener(new ViewPagerPageChangeListener());
         mImageSelectStateView = (ImageView) findViewById(R.id.iv_photo_select_state);
@@ -89,46 +72,16 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
     }
 
     public void onSelectClick(View v) {
-        mCurrentImageModel.select = !mCurrentImageModel.select;
-        updateSelectState();
-    }
-
-    private void updateSelectState() {
-        if (mCurrentImageModel.select) {
-            if (mSelectMap.size() >= 9) {
-                Toast.makeText(this, "最多选择9张图片", Toast.LENGTH_SHORT).show();
-            } else {
-                mSelectMap.put(mCurrentImageModel.url, mCurrentImageModel.url);
-                mImageSelectStateView.setBackgroundResource(R.mipmap.checkbox_checked);
-            }
-        } else {
-            if (mSelectMap.containsKey(mCurrentImageModel.url)) {
-                mSelectMap.remove(mCurrentImageModel.url);
-            }
-            mImageSelectStateView.setBackgroundResource(R.mipmap.checkbox_normal);
-        }
-        mPics.get(mCurrentIndex).select = mCurrentImageModel.select;
-        mSureTextView.setText("确定(" + mSelectMap.size() + ")");
-    }
-
-    private void getPics() {
-        Intent intent = getIntent();
-        mPics = (ArrayList<ImageSelectModel>) intent.getSerializableExtra(IMAGES);
-        mCurrentIndex = intent.getIntExtra(INDEX, 0);
-        mSelectMap = (HashMap<String, String>) intent.getSerializableExtra(SELECTED_LIST);
-        if (intent.hasExtra(CLASS_TARGET)) {
-            targetClass = (Class<?>) intent.getSerializableExtra(CLASS_TARGET);
-        }
+        mPhotoPreviewPresenter.onSelectClick();
     }
 
     private class ViewPagerPageChangeListener implements ViewPager.OnPageChangeListener {
 
         @Override
         public void onPageSelected(int arg0) {
-            mCurrentIndex = arg0;
-            mCurrentImageModel = mPics.get(mCurrentIndex);
-            updateCurrentImageState();
-            updateImagePageIndex(mCurrentIndex + 1);
+            if (mPhotoPreviewPresenter != null) {
+                mPhotoPreviewPresenter.setCurrentImageModel(arg0);
+            }
         }
 
         @Override
@@ -140,21 +93,16 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
         }
     }
 
-    private void updateImagePageIndex(int page) {
-        mPageIndexTextView.setText(this.getResources().getString(R.string.image_page_index, page, mPics.size()));
+    @Override
+    public void updateImagePageIndexText(int page, int size) {
+        mPageIndexTextView.setText(this.getResources().getString(R.string.image_page_index, page, size));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-          /*  case R.id.tv_title:
-                onBack();
-                break;
-            default:
-                onBack();
-                break;*/
-        }
 
+        }
     }
 
     public void onSureClick(View v) {
@@ -163,9 +111,9 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
 
     protected void onBack(int state) {
         Intent intent = new Intent();
-        intent.putExtra(INDEX, mCurrentIndex);
-        intent.putExtra(SELECTED_LIST, mSelectMap);
-        intent.putExtra(IMAGES, mPics);
+        intent.putExtra(INDEX, mPhotoPreviewPresenter.getCurrentIndex());
+        intent.putExtra(SELECTED_LIST, mPhotoPreviewPresenter.getSelectMap());
+        intent.putExtra(IMAGES, mPhotoPreviewPresenter.getPics());
         setResult(state, intent);
         this.finish();
     }
@@ -177,5 +125,31 @@ public class PhotoWallPreviewActivity extends BaseActivity implements View.OnCli
     @Override
     public void onBackPressed() {
         onBack(RESULT_CANCELED);
+    }
+
+
+    @Override
+    public Intent getActivityIntent() {
+        return getIntent();
+    }
+
+    public void setSureBtnString(String sureTextView) {
+        mSureTextView.setText(sureTextView);
+    }
+
+    @Override
+    public void setCurrentItem(int currentItem) {
+        mViewPager.setCurrentItem(currentItem);
+    }
+
+    @Override
+    public void updateAdapter(List<ImageSelectModel> list) {
+        mAdapter.setData(list);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void toastBeyondPicSize() {
+        Toast.makeText(this, "最多选择9张图片", Toast.LENGTH_SHORT).show();
     }
 }

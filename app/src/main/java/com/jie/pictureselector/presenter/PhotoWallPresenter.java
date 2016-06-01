@@ -79,12 +79,12 @@ public class PhotoWallPresenter extends BasePresenter<IPhotoWallView> {
         return list;
     }
 
-    // 获取已选择的图片路径
-    public ArrayList<String> getSelectImagePaths(Map<String, String> map, ArrayList<String> mSelectList) {
-        if (map.size() == 0) {
-            return null;
-        }
-
+    /**
+     * 获取已选择的图片路径
+     * @param map  选择的map
+     * @param mSelectList
+     */
+    public void onMultiplePicSelectComplete(Map<String, String> map, ArrayList<String> mSelectList) {
         if (mSelectList != null && mSelectList.size() > 0) {
             for (String s : mSelectList) {
                 if (map.containsKey(s)) {
@@ -97,7 +97,7 @@ public class PhotoWallPresenter extends BasePresenter<IPhotoWallView> {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             selectedImageList.add(entry.getValue());
         }
-        return selectedImageList;
+       getBaseView().onMultipleTypeFinish(selectedImageList);
     }
 
     /**
@@ -146,7 +146,6 @@ public class PhotoWallPresenter extends BasePresenter<IPhotoWallView> {
             }
         }
         getBaseView().updatePhotoWall();
-        // adapter.notifyDataSetChanged();
         if (list.size() > 0) {
             // 滚动至顶部
             getBaseView().smoothScrollToPosition(0);

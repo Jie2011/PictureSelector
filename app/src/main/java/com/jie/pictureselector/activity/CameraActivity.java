@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.jie.pictureselector.R;
 import com.jie.pictureselector.constant.FileConstant;
+import com.jie.pictureselector.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,22 +51,7 @@ public class CameraActivity extends BaseActivity {
 				cutFileName = FileConstant.CACHE_PHOTE + "senbaCut_" + System.currentTimeMillis() + ".jpg";
 				if (mType == PhotoWallActivity.TYPE_SINGLE) {
 					if (mIsCut == PhotoWallActivity.CUT) {
-						Uri uri = Uri.fromFile(new File(tempFileName));
-
-						Intent intent = new Intent("com.android.camera.action.CROP");
-						intent.setDataAndType(uri, "image/*");
-						intent.putExtra("crop", "true");
-						// aspectX aspectY 是宽高的比例
-						intent.putExtra("aspectX", 1);
-						intent.putExtra("aspectY", 1);
-						// outputX outputY 是裁剪图片宽高
-						intent.putExtra("outputX", 400);
-						intent.putExtra("outputY", 400);
-						intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(cutFileName)));
-						intent.putExtra("scale", true);
-						intent.putExtra("return-data", false);
-						intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-						startActivityForResult(intent, REQUEST_CUT_PHOTO);
+						startActivityForResult(Utils.getCropIntent(tempFileName,cutFileName), REQUEST_CUT_PHOTO);
 					} else {
 						cutFileName = tempFileName;
 						close();

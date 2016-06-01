@@ -2,10 +2,7 @@ package com.jie.pictureselector.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -21,8 +18,8 @@ import com.jie.pictureselector.constant.Constant;
 import com.jie.pictureselector.model.ImageSelectModel;
 import com.jie.pictureselector.presenter.PhotoWallPresenter;
 import com.jie.pictureselector.utils.ScreenUtils;
+import com.jie.pictureselector.utils.Utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,8 +86,7 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
         initGridView();
     }
 
-
-    private void initPersenter(){
+    private void initPersenter() {
         mPhotoWallPresenter = new PhotoWallPresenter(this);
         mPhotoWallPresenter.initLastestScreen();
         list = mPhotoWallPresenter.getList();
@@ -106,11 +102,10 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
     }
 
     private void initBaseView() {
-        titleTV = (TextView) findViewById(R.id.topbar_title_tv);
+        titleTV = $(R.id.topbar_title_tv);
         titleTV.setText(R.string.latest_image);
-
-        Button backBtn = (Button) findViewById(R.id.topbar_left_btn);
-        confirmBtn = (Button) findViewById(R.id.topbar_right_btn);
+        Button backBtn = $(R.id.topbar_left_btn);
+        confirmBtn = $(R.id.topbar_right_btn);
         backBtn.setText(R.string.photo_album);
         backBtn.setVisibility(View.VISIBLE);
         if (mType == TYPE_SINGLE) {
@@ -124,7 +119,7 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
 
     private void initGridView() {
         mPhotoWall = (GridView) findViewById(R.id.photo_wall_grid);
-        adapter = new PhotoWallAdapter(this,list, mType, this, mSelectList);
+        adapter = new PhotoWallAdapter(this, list, mType, this, mSelectList);
         mPhotoWall.setAdapter(adapter);
         mPhotoWall.setOnItemClickListener(this);
         // 选择照片完成
@@ -134,19 +129,6 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
             confirmBtn.setText("确定(" + mSelectList.size() + ")");
         }
     }
-
-    /**
-     * 多张图片选择时finish方法
-     *
-     * @param paths
-     */
-    private void multipleTypeFinish(ArrayList<String> paths) {
-        Intent intent = new Intent();
-        intent.putStringArrayListExtra(PHOTO_URLS, paths);
-        setResult(RESULT_OK, intent);
-        PhotoWallActivity.this.finish();
-    }
-
 
     /**
      * 点击返回时，跳转至相册页面
@@ -192,22 +174,7 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
         if (mType == TYPE_SINGLE) {
             if (isCut == CUT) {
                 cutFileName = cutFileName + "senbaCut_" + System.currentTimeMillis() + ".jpg";
-                Uri uri = Uri.fromFile(new File(list.get(position).url));
-
-                Intent intent = new Intent("com.android.camera.action.CROP");
-                intent.setDataAndType(uri, "image/*");
-                intent.putExtra("crop", "true");
-                // aspectX aspectY 是宽高的比例
-                intent.putExtra("aspectX", 1);
-                intent.putExtra("aspectY", 1);
-                // outputX outputY 是裁剪图片宽高
-                intent.putExtra("outputX", 400);
-                intent.putExtra("outputY", 400);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(cutFileName)));
-                intent.putExtra("scale", true);
-                intent.putExtra("return-data", false);
-                intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-                startActivityForResult(intent, 1);
+                startActivityForResult(Utils.getCropIntent(list.get(position).url, cutFileName), 1);
             } else {
                 ArrayList<String> paths = new ArrayList<String>();
                 paths.add(list.get(position).url);
@@ -238,8 +205,7 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
                 this.finish();
             } else if (requestCode == PhotoWallPreviewActivity.REQUEST_CODE_PREVIEW) {
                 Map<String, String> selectMap = (HashMap<String, String>) data.getSerializableExtra(PhotoWallPreviewActivity.SELECTED_LIST);
-                ArrayList<String> paths = mPhotoWallPresenter.getSelectImagePaths(selectMap, mSelectList);
-                multipleTypeFinish(paths);
+                mPhotoWallPresenter.onMultiplePicSelectComplete(selectMap, mSelectList);
             }
         } else if (resultCode == RESULT_CANCELED) {
             if (requestCode == PhotoWallPreviewActivity.REQUEST_CODE_PREVIEW) {
@@ -268,19 +234,13 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
                     setResult(RESULT_OK);
                     PhotoWallActivity.this.finish();
                 } else {
-                    ArrayList<String> paths = mPhotoWallPresenter.getSelectImagePaths(adapter.getSelectionMap(), mSelectList);
-                    multipleTypeFinish(paths);
+                    mPhotoWallPresenter.onMultiplePicSelectComplete(adapter.getSelectionMap(), mSelectList);
                 }
                 break;
             case R.id.topbar_left_btn:
                 backAction();
                 break;
         }
-
-    }
-
-    @Override
-    public void showLoadingView() {
 
     }
 
@@ -309,4 +269,11 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
         mPhotoWall.smoothScrollToPosition(pos);
     }
 
+    @Override
+    public void onMultipleTypeFinish(ArrayList<String> selectedImageList) {
+        Intent intent = new Intent();
+        intent.putStringArrayListExtra(PHOTO_URLS, selectedImageList);
+        setResult(RESULT_OK, intent);
+        PhotoWallActivity.this.finish();
+    }
 }

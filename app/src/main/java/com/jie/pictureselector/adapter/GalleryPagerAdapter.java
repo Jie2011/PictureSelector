@@ -11,18 +11,22 @@ import com.jie.pictureselector.model.ImageSelectModel;
 import com.jie.pictureselector.view.PhotoWallPreviewView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GalleryPagerAdapter extends PagerAdapter {
-    private ArrayList<ImageSelectModel> mData;
+    private List<ImageSelectModel> mData = new ArrayList<>();
     private View.OnClickListener mClickListener;
     private Context mContext;
 
-    public GalleryPagerAdapter(Context context, ArrayList<ImageSelectModel> mPics,
+    public GalleryPagerAdapter(Context context,
                                View.OnClickListener clickListener) {
         super();
-        mData = mPics;
         mClickListener = clickListener;
         mContext = context;
+    }
+
+    public void setData(List<ImageSelectModel> data) {
+        mData = data;
     }
 
     @Override
