@@ -54,3 +54,5 @@
     }
 	
 ![image](https://github.com/Jie2011/PictureSelector/blob/master/image/Screenshot_2016-06-01-17-22-54_com.jie.pictureselector.png)
+![image](https://github.com/Jie2011/PictureSelector/blob/master/image/Screenshot_2016-06-01-17-23-11_com.jie.pictureselector.png)
+
