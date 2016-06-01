@@ -13,7 +13,7 @@
 调用SelectImageHomeActivity的gotoSelectImageActivity
 
 
-/**
+	/**
 	 * 进入图片选择方式页面
 	 * @param activity
 	 * @param typeId  类型 单选还是多选  PhotoWallActivity.TYPE_SINGLE为单选 PhontWallActivity.TYPE_MULTIPLE为多选
@@ -35,7 +35,7 @@
 	}
 
 	
-采用的方式是startActivityForResult，在调用页面onActivityResult逻辑：
+	采用的方式是startActivityForResult，在调用页面onActivityResult逻辑：
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
        if (resultCode == RESULT_OK){
