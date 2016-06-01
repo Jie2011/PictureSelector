@@ -119,15 +119,11 @@ public class PhotoWallPresenter extends BasePresenter<IPhotoWallView> {
 
         return imageFilePaths;
     }
-
     /**
      * 根据图片所属文件夹路径，刷新页面
      */
-    public void updateView(int code, String folderPath) {
+    public void enterAlbum(int code, String folderPath) {
         list.clear();
-       /* adapter.clearSelectionMap();
-        adapter.notifyDataSetChanged();*/
-
         if (code == 100) { // 某个相册
             int lastSeparator = folderPath.lastIndexOf(File.separator);
             String folderName = folderPath.substring(lastSeparator + 1);
@@ -155,9 +151,5 @@ public class PhotoWallPresenter extends BasePresenter<IPhotoWallView> {
             // 滚动至顶部
             getBaseView().smoothScrollToPosition(0);
         }
-    }
-
-    public void enterAlbum(int code ,String folderPath){
-        updateView(code, folderPath);
     }
 }
