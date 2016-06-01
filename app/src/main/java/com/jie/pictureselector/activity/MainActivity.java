@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity {
        if (resultCode == RESULT_OK){
            if (requestCode == SelectImageHomeActivity.CODE_PHOTO) {
                if (intent != null && intent.hasExtra(SelectImageHomeActivity.PHOTO_URLS)) {
-                   ArrayList<String> images = intent.getStringArrayListExtra(SelectImageHomeActivity.PHOTO_URLS);
+                   ArrayList<String> images = intent.getStringArrayListExtra(SelectImageHomeActivity.PHOTO_URLS);  //获取图片路径列表，大小为1是单选的
                    if (images != null && images.size() > 0) {
                       String  mNewImageUrl = images.get(0);
                        if (!TextUtils.isEmpty(mNewImageUrl)) {
