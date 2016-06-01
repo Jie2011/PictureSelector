@@ -11,6 +11,8 @@
    
 使用方法：
 调用SelectImageHomeActivity的gotoSelectImageActivity
+
+
 /**
 	 * 进入图片选择方式页面
 	 * @param activity
@@ -31,8 +33,9 @@
 		intent.putExtra(PhotoWallActivity.IS_CUT, isCut);
 		activity.startActivityForResult(intent, CODE_PHOTO);
 	}
+
 	
-	采用的方式是startActivityForResult，在调用页面onActivityResult逻辑：
+采用的方式是startActivityForResult，在调用页面onActivityResult逻辑：
 	@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
        if (resultCode == RESULT_OK){
