@@ -183,7 +183,7 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
             if (code == Constant.TYPE_ALBUM_OTHER) {
                 folderPath = intent.getStringExtra(Constant.TYPE_FOLDERPATH);
             }
-            mPhotoWallPresenter.enterAlbum(code,folderPath);
+            mPhotoWallPresenter.enterAlbum(code, folderPath);
         }
     }
 
@@ -307,5 +307,10 @@ public class PhotoWallActivity extends BaseActivity implements OnItemClickListen
     @Override
     public void smoothScrollToPosition(int pos) {
         mPhotoWall.smoothScrollToPosition(pos);
+    }
+
+    @Override
+    public void setConfirmString(String confirmString) {
+        confirmBtn.setText(confirmString);
     }
 }

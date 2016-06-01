@@ -15,4 +15,6 @@ public interface IPhotoWallView extends BaseView {
     void setTitleString(int titleId);
 
     void smoothScrollToPosition(int pos);
+
+    void setConfirmString(String confirmString);
 }
